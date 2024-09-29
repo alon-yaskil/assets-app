@@ -1,6 +1,5 @@
 :root {
-  height: 100vh;
-  width: 100vw;
+  background-color: var(--app-background);
 
   --app-background: #f1e9e0;
   --header-border: #f7a03d;

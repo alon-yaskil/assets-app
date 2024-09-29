@@ -1,3 +1,5 @@
+import EditIcon from "@mui/icons-material/Edit";
+import SaveIcon from "@mui/icons-material/Save";
 import {
   TableBody,
   TableCell,
@@ -6,26 +8,57 @@ import {
   TableRow,
 } from "@mui/material";
 import Table from "@mui/material/Table";
-import { useCallback, useEffect, useState } from "react";
-import { AssetsResponse, getAssets } from "../api/api";
-import { columns, getColumnValue } from "../lib/tableTypes";
-import { Container } from "../styles/assetsTable";
-
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { Asset, AssetsResponse, getAssets, putAssets } from "../api/api";
+import { columns } from "../lib/tableTypes";
+import {
+  Buttons,
+  Container,
+  EditButton,
+  SaveButton,
+} from "../styles/assetsTable";
+import AssetRow from "./AssetRow";
 const PAGE_SIZE = 10;
 
 const AssetsTable = () => {
-  const [pageIndex, setPageIndex] = useState<number>(0);
+  const [pageIndex, setPageIndex] = useState(0);
   const [assetResponse, setAssetsResponse] = useState<AssetsResponse>({
     data: [],
     total: 0,
   });
+  const [updatedAssetsMap, setUpdatedAssetsMap] = useState<{
+    [key: string]: Asset;
+  }>({});
+
+  const [editMode, setEditMode] = useState(false);
+
+  const onClickEditCallback = useCallback(() => {
+    setEditMode((mode) => !mode);
+  }, []);
 
   const onChangePageCallback = useCallback(
     (event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
       setPageIndex(newPage);
     },
-    [],
+    []
   );
+
+  const hasUpadates = useMemo(
+    () => !!Object.keys(updatedAssetsMap).length,
+    [updatedAssetsMap]
+  );
+
+  const onUpdateAssetCallback = useCallback(
+    (asset: Asset) => {
+      updatedAssetsMap[asset._id] = asset;
+      setUpdatedAssetsMap({ ...updatedAssetsMap });
+    },
+    [updatedAssetsMap]
+  );
+
+  const onSaveCallback = useCallback(() => {
+    putAssets(Object.entries(updatedAssetsMap).map(([key, asset]) => asset));
+  }, [updatedAssetsMap]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -41,6 +74,16 @@ const AssetsTable = () => {
 
   return (
     <Container>
+      <Buttons>
+        {editMode ? (
+          <SaveButton onClick={onSaveCallback} disabled={!hasUpadates}>
+            <SaveIcon />
+          </SaveButton>
+        ) : null}
+        <EditButton editMode={editMode} onClick={onClickEditCallback}>
+          <EditIcon />
+        </EditButton>
+      </Buttons>
       <Table stickyHeader aria-label="sticky table">
         <TableHead>
           <TableRow>
@@ -51,19 +94,12 @@ const AssetsTable = () => {
         </TableHead>
         <TableBody>
           {assetResponse.data.map((asset) => (
-            <TableRow key={asset._id}>
-              {columns.map(({ id }) => {
-                const value = getColumnValue(asset, id);
-
-                return (
-                  <TableCell key={id}>
-                    {!value && typeof value !== "boolean"
-                      ? "N/A"
-                      : value.toString()}
-                  </TableCell>
-                );
-              })}
-            </TableRow>
+            <AssetRow
+              key={asset._id}
+              originalAsset={asset}
+              editMode={editMode}
+              onUpdate={onUpdateAssetCallback}
+            />
           ))}
         </TableBody>
         <TablePagination
