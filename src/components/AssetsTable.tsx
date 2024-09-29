@@ -1,5 +1,6 @@
 import EditIcon from "@mui/icons-material/Edit";
 import SaveIcon from "@mui/icons-material/Save";
+import UndoIcon from "@mui/icons-material/Undo";
 import {
   TableBody,
   TableCell,
@@ -15,13 +16,15 @@ import {
   Buttons,
   Container,
   EditButton,
-  SaveButton,
+  SaveUndoButton,
 } from "../styles/assetsTable";
 import AssetRow from "./AssetRow";
 const PAGE_SIZE = 10;
 
 const AssetsTable = () => {
   const [pageIndex, setPageIndex] = useState(0);
+  const [editMode, setEditMode] = useState(false);
+  const [undoTs, setUndoTs] = useState(0);
   const [assetResponse, setAssetsResponse] = useState<AssetsResponse>({
     data: [],
     total: 0,
@@ -29,19 +32,6 @@ const AssetsTable = () => {
   const [updatedAssetsMap, setUpdatedAssetsMap] = useState<{
     [key: string]: Asset;
   }>({});
-
-  const [editMode, setEditMode] = useState(false);
-
-  const onClickEditCallback = useCallback(() => {
-    setEditMode((mode) => !mode);
-  }, []);
-
-  const onChangePageCallback = useCallback(
-    (event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
-      setPageIndex(newPage);
-    },
-    [],
-  );
 
   const hasUpadates = useMemo(
     () => !!Object.keys(updatedAssetsMap).length,
@@ -55,7 +45,6 @@ const AssetsTable = () => {
     },
     [updatedAssetsMap],
   );
-
   const onSaveCallback = useCallback(async () => {
     try {
       await updateAssets(
@@ -67,6 +56,23 @@ const AssetsTable = () => {
       console.error(e);
     }
   }, [updatedAssetsMap]);
+  const onClickEditCallback = useCallback(() => {
+    setEditMode((mode) => !mode);
+  }, []);
+  const onChangePageCallback = useCallback(
+    (event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
+      if (hasUpadates) {
+        alert("some changes was not saved, save or undo changes");
+        return;
+      }
+      setPageIndex(newPage);
+    },
+    [hasUpadates],
+  );
+  const undoChangesCallback = useCallback(() => {
+    setUpdatedAssetsMap({});
+    setUndoTs(Date.now());
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -80,13 +86,32 @@ const AssetsTable = () => {
     fetchData();
   }, [pageIndex]);
 
+  useEffect(() => {
+    const handleBeforeUnload = (event: any) => {
+      if (hasUpadates) {
+        event.preventDefault();
+        event.returnValue = "";
+      }
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, [hasUpadates]);
   return (
     <Container>
       <Buttons>
         {editMode ? (
-          <SaveButton onClick={onSaveCallback} disabled={!hasUpadates}>
+          <SaveUndoButton onClick={undoChangesCallback} disabled={!hasUpadates}>
+            <UndoIcon />
+          </SaveUndoButton>
+        ) : null}
+        {editMode ? (
+          <SaveUndoButton onClick={onSaveCallback} disabled={!hasUpadates}>
             <SaveIcon />
-          </SaveButton>
+          </SaveUndoButton>
         ) : null}
         <EditButton editMode={editMode} onClick={onClickEditCallback}>
           <EditIcon />
@@ -107,6 +132,7 @@ const AssetsTable = () => {
               originalAsset={asset}
               editMode={editMode}
               onUpdate={onUpdateAssetCallback}
+              undoTs={undoTs}
             />
           ))}
         </TableBody>

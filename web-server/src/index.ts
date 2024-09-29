@@ -31,7 +31,7 @@ app.get("/assets", (req: Request, res: Response) => {
 
 app.put("/assets", (req: Request, res: Response) => {
   const newAssets = req.body;
-  console;
+
   for (const asset of newAssets) {
     const assetIndex = mock.findIndex((a) => a._id === asset._id);
 

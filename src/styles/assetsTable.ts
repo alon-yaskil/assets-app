@@ -1,3 +1,4 @@
+import { TableRow } from "@mui/material";
 import styled from "styled-components";
 
 export const Container = styled.div`
@@ -18,10 +19,15 @@ export const EditButton = styled.button<{ editMode: boolean }>`
   border: ${({ editMode }) =>
     editMode ? "1px solid black" : "1px solid var(--app-background)"};
 `;
-export const SaveButton = styled.button`
+export const SaveUndoButton = styled.button`
   &:hover {
     cursor: pointer;
   }
   border: none;
   margin: 0 10px;
+`;
+
+export const StyledTableRow = styled(TableRow)<{ dirty: boolean }>`
+  background-color: ${({ dirty }) =>
+    dirty ? "var(--updated-background)" : "none"};
 `;

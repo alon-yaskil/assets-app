@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import { Asset } from "../api/api";
 import { Column } from "../lib/tableTypes";
 import { getColumnValue, setColumnValue } from "../lib/utils";
@@ -15,6 +15,10 @@ const TableValue = ({ asset, column, editMode, onUpdate }: Props) => {
     () => getColumnValue(asset, column.id),
     [asset, column],
   );
+
+  useEffect(() => {
+    console.log("render", asset.assetName);
+  }, [asset]);
 
   const onChange = useCallback(
     (e: React.ChangeEvent<HTMLSelectElement>) => {
