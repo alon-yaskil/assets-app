@@ -1,5 +1,3 @@
-import mockAssets from "./mock.json";
-
 export interface Owner {
   name: string | null;
 }
@@ -19,29 +17,30 @@ export interface AssetsResponse {
   data: Asset[];
 }
 
+// const baseUrl = (process).env.REACT_APP_API_URL
+
 export const getAssets = async (
   pageIndex: number,
   pageSize: number,
 ): Promise<AssetsResponse> => {
-  await sleep(200);
-  return {
-    total: mockAssets.length,
-    data: mockAssets.slice(
-      pageIndex * pageSize,
-      pageIndex * pageSize + pageSize,
-    ),
-  };
+  const response = await fetch(
+    `http://localhost:3000/assets?pageSize=${pageSize}&pageIndex=${pageIndex}`,
+  );
+  if (!response.ok) {
+    throw new Error("failed to fetch assets");
+  }
+  return await response.json();
 };
 
-export const putAssets = async (assets: Asset[]): Promise<void> => {
-  await sleep(200);
-  for (const asset of assets) {
-    const index = mockAssets.findIndex((a) => a._id === asset._id);
-    if (index === -1) {
-      throw new Error("asset does not exist");
-    }
-    // write updates
+export const updateAssets = async (assets: Asset[]): Promise<void> => {
+  const response = await fetch(`http://localhost:3000/assets`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(assets),
+  });
+  if (!response.ok) {
+    throw new Error("failed to update");
   }
 };
-
-const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));

@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import Table from "@mui/material/Table";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { Asset, AssetsResponse, getAssets, putAssets } from "../api/api";
+import { Asset, AssetsResponse, getAssets, updateAssets } from "../api/api";
 import { columns } from "../lib/tableTypes";
 import {
   Buttons,
@@ -56,8 +56,16 @@ const AssetsTable = () => {
     [updatedAssetsMap],
   );
 
-  const onSaveCallback = useCallback(() => {
-    putAssets(Object.entries(updatedAssetsMap).map(([key, asset]) => asset));
+  const onSaveCallback = useCallback(async () => {
+    try {
+      await updateAssets(
+        Object.entries(updatedAssetsMap).map(([key, asset]) => asset),
+      );
+      setUpdatedAssetsMap({});
+      setEditMode(false);
+    } catch (e) {
+      console.error(e);
+    }
   }, [updatedAssetsMap]);
 
   useEffect(() => {
