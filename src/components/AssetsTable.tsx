@@ -40,12 +40,12 @@ const AssetsTable = () => {
     (event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
       setPageIndex(newPage);
     },
-    []
+    [],
   );
 
   const hasUpadates = useMemo(
     () => !!Object.keys(updatedAssetsMap).length,
-    [updatedAssetsMap]
+    [updatedAssetsMap],
   );
 
   const onUpdateAssetCallback = useCallback(
@@ -53,7 +53,7 @@ const AssetsTable = () => {
       updatedAssetsMap[asset._id] = asset;
       setUpdatedAssetsMap({ ...updatedAssetsMap });
     },
-    [updatedAssetsMap]
+    [updatedAssetsMap],
   );
 
   const onSaveCallback = useCallback(() => {

@@ -21,14 +21,14 @@ export interface AssetsResponse {
 
 export const getAssets = async (
   pageIndex: number,
-  pageSize: number
+  pageSize: number,
 ): Promise<AssetsResponse> => {
   await sleep(200);
   return {
     total: mockAssets.length,
     data: mockAssets.slice(
       pageIndex * pageSize,
-      pageIndex * pageSize + pageSize
+      pageIndex * pageSize + pageSize,
     ),
   };
 };

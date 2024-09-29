@@ -17,7 +17,7 @@ const AssetRow = ({ originalAsset, editMode, onUpdate }: Props) => {
       setAsset({ ...updatedAsset });
       onUpdate(updatedAsset);
     },
-    [onUpdate]
+    [onUpdate],
   );
   return (
     <>

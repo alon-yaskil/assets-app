@@ -13,7 +13,7 @@ interface Props {
 const TableValue = ({ asset, column, editMode, onUpdate }: Props) => {
   const value = useMemo(
     () => getColumnValue(asset, column.id),
-    [asset, column]
+    [asset, column],
   );
 
   const onChange = useCallback(
@@ -25,7 +25,7 @@ const TableValue = ({ asset, column, editMode, onUpdate }: Props) => {
       setColumnValue(asset, column.id, newValue);
       onUpdate({ ...asset });
     },
-    [onUpdate]
+    [onUpdate],
   );
   return column.id === "enriched.isCrownJewel" ? (
     <select value={value.toString()} disabled={!editMode} onChange={onChange}>

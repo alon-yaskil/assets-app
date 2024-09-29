@@ -16,7 +16,7 @@ export const getColumnValue = (asset: Asset, path: string) => {
 export const setColumnValue = (
   asset: Asset,
   path: string,
-  value: string | boolean | null
+  value: string | boolean | null,
 ) => {
   if (
     path === "owner.name" &&
