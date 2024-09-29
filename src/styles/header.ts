@@ -1,7 +1,6 @@
 import styled from "styled-components";
 
 export const Container = styled.div`
-  width: 100%;
   height: 2rem;
   border-bottom: 2px solid var(--header-border);
   padding: 16px 24px;

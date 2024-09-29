@@ -5,8 +5,8 @@ import Header from "./components/Header";
 function App() {
   return (
     <Layout>
-      <Header></Header>
-      <AssetsTable></AssetsTable>
+      <Header />
+      <AssetsTable />
     </Layout>
   );
 }

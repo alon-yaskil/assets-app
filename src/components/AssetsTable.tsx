@@ -8,7 +8,6 @@ import {
   TablePagination,
   TableRow,
 } from "@mui/material";
-import Table from "@mui/material/Table";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Asset, AssetsResponse, getAssets, updateAssets } from "../api/api";
 import { columns } from "../lib/tableTypes";
@@ -17,6 +16,7 @@ import {
   Container,
   EditButton,
   SaveUndoButton,
+  StyledTable,
 } from "../styles/assetsTable";
 import AssetRow from "./AssetRow";
 const PAGE_SIZE = 10;
@@ -117,7 +117,7 @@ const AssetsTable = () => {
           <EditIcon />
         </EditButton>
       </Buttons>
-      <Table stickyHeader aria-label="sticky table">
+      <StyledTable stickyHeader aria-label="sticky table">
         <TableHead>
           <TableRow>
             {columns.map(({ id, label }) => (
@@ -147,7 +147,7 @@ const AssetsTable = () => {
           showFirstButton
           showLastButton
         />
-      </Table>
+      </StyledTable>
     </Container>
   );
 };
