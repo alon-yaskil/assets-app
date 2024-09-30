@@ -21,7 +21,7 @@ const AssetRow = ({ originalAsset, editMode, onUpdate, undoTs }: Props) => {
       setDirty(true);
       onUpdate(updatedAsset);
     },
-    [onUpdate],
+    [onUpdate]
   );
 
   useEffect(() => {
@@ -34,7 +34,7 @@ const AssetRow = ({ originalAsset, editMode, onUpdate, undoTs }: Props) => {
 
   return (
     <>
-      <StyledTableRow key={asset._id} dirty={dirty}>
+      <StyledTableRow key={asset._id} $dirty={dirty}>
         {columns.map((column) => {
           return (
             <TableCell key={column.id}>

@@ -33,7 +33,7 @@ export const StyledTable = styled(Table)`
 
   overflow: scroll;
 `;
-export const StyledTableRow = styled(TableRow)<{ dirty: boolean }>`
-  background-color: ${({ dirty }) =>
-    dirty ? "var(--updated-background)" : "none"};
+export const StyledTableRow = styled(TableRow)<{ $dirty: boolean }>`
+  background-color: ${({ $dirty }) =>
+    $dirty ? "var(--updated-background)" : "none"};
 `;

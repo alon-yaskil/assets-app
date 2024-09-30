@@ -1,6 +1,6 @@
-import styled from "styled-components";
 import AssetsTable from "./components/AssetsTable";
 import Header from "./components/Header";
+import { Layout } from "./styles/app";
 
 function App() {
   return (
@@ -12,10 +12,3 @@ function App() {
 }
 
 export default App;
-
-const Layout = styled.div`
-  height: 100vh;
-  width: 100vw;
-  display: flex;
-  flex-direction: column;
-`;

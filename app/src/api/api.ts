@@ -17,14 +17,14 @@ export interface AssetsResponse {
   data: Asset[];
 }
 
-// const baseUrl = (process).env.REACT_APP_API_URL
+const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
 export const getAssets = async (
   pageIndex: number,
-  pageSize: number,
+  pageSize: number
 ): Promise<AssetsResponse> => {
   const response = await fetch(
-    `http://localhost:3000/assets?pageSize=${pageSize}&pageIndex=${pageIndex}`,
+    `${baseUrl}/assets?pageSize=${pageSize}&pageIndex=${pageIndex}`
   );
   if (!response.ok) {
     throw new Error("failed to fetch assets");
@@ -33,7 +33,7 @@ export const getAssets = async (
 };
 
 export const updateAssets = async (assets: Asset[]): Promise<void> => {
-  const response = await fetch(`http://localhost:3000/assets`, {
+  const response = await fetch(`${baseUrl}/assets`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
