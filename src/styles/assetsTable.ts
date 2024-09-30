@@ -13,11 +13,11 @@ export const Buttons = styled.div`
   display: flex;
   justify-content: end;
 `;
-export const EditButton = styled.button<{ editMode: boolean }>`
+export const EditButton = styled.button<{ $editMode: boolean }>`
   &:hover {
     cursor: pointer;
   }
-  border: ${({ editMode }) =>
+  border: ${({ $editMode: editMode }) =>
     editMode ? "1px solid black" : "1px solid var(--app-background)"};
 `;
 export const SaveUndoButton = styled.button`

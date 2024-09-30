@@ -104,16 +104,28 @@ const AssetsTable = () => {
     <Container>
       <Buttons>
         {editMode ? (
-          <SaveUndoButton onClick={undoChangesCallback} disabled={!hasUpadates}>
+          <SaveUndoButton
+            aria-label="undo-button"
+            onClick={undoChangesCallback}
+            disabled={!hasUpadates}
+          >
             <UndoIcon />
           </SaveUndoButton>
         ) : null}
         {editMode ? (
-          <SaveUndoButton onClick={onSaveCallback} disabled={!hasUpadates}>
+          <SaveUndoButton
+            aria-label="save-button"
+            onClick={onSaveCallback}
+            disabled={!hasUpadates}
+          >
             <SaveIcon />
           </SaveUndoButton>
         ) : null}
-        <EditButton editMode={editMode} onClick={onClickEditCallback}>
+        <EditButton
+          aria-label="edit-button"
+          $editMode={editMode}
+          onClick={onClickEditCallback}
+        >
           <EditIcon />
         </EditButton>
       </Buttons>

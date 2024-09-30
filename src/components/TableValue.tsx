@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import { Asset } from "../api/api";
 import { Column } from "../lib/tableTypes";
 import { getColumnValue, setColumnValue } from "../lib/utils";
@@ -16,10 +16,6 @@ const TableValue = ({ asset, column, editMode, onUpdate }: Props) => {
     [asset, column],
   );
 
-  useEffect(() => {
-    console.log("render", asset.assetName);
-  }, [asset]);
-
   const onChange = useCallback(
     (e: React.ChangeEvent<HTMLSelectElement>) => {
       const newValue = e.target.value;
@@ -32,9 +28,14 @@ const TableValue = ({ asset, column, editMode, onUpdate }: Props) => {
     [onUpdate],
   );
   return column.id === "enriched.isCrownJewel" ? (
-    <select value={value.toString()} disabled={!editMode} onChange={onChange}>
+    <select
+      aria-label={`select-${asset._id}`}
+      value={value.toString()}
+      disabled={!editMode}
+      onChange={onChange}
+    >
       <option value={"true"}>True</option>
-      <option value={"false"}>false</option>
+      <option value={"false"}>False</option>
     </select>
   ) : !value && typeof value !== "boolean" ? (
     "N/A"
