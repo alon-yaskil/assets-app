@@ -15,7 +15,6 @@ app.use(
 app.use(express.json());
 
 app.get("/assets", (req: Request, res: Response) => {
-  console.log("get");
   const pageIndex = Number(req.query.pageIndex);
   const pageSize = Number(req.query.pageSize);
   if (!(pageIndex >= 0 && pageSize >= 0)) {
